@@ -422,19 +422,20 @@ levels.plot <-
   labs(x = "Corrosion inhibitor", color = "Inhibitor level", shape = "Inhibitor level",
        y = "Bray-Curtis dissimilarity score\ncompared to same-day control")
 levels.plot
-#ggsave("Plots/beta_inhibitorLevels.pdf", plot = levels.plot, device = "pdf", width = 3, height = 4, units = "in")
+
+#ggsave("PLOTS/beta_inhibitorLevels.pdf", plot = levels.plot, device = "pdf", width = 3, height = 4, units = "in")
 
 
 # effects on deep water
-beta_treat <- beta[beta$Set_x != "set3", 
+beta_deep <- beta[beta$Set_x != "set3", 
                    c("Bray", "Set_y", "Source_y", "Inhib_y", "Level_y", "Day_y")]
-colnames(beta_treat)[-1] <- c("Set", "Source", "Inhibitor", "Level", "Day")
+colnames(beta_deep)[-1] <- c("Set", "Source", "Inhibitor", "Level", "Day")
 treat_summary <- beta_summary[beta_summary$Set %in% c("set1", "set2"),]
 
 
 # plot
 deep.plot <-
-  ggplot(beta_treat, aes(x = Inhibitor, y = Bray, color = Source)) +
+  ggplot(beta_deep, aes(x = Inhibitor, y = Bray, color = Source)) +
   
   # points
   geom_jitter(shape = 1, size = 0.5, position = 
@@ -467,9 +468,9 @@ deep.plot <-
   guides(color = guide_legend(title.hjust = 0.5, keyheight = 0.75, nrow = 2, title.position = "right")) +
   labs(x = "Corrosion inhibitor", color = "Water source", shape = "Water source",
        y = "Bray-Curtis dissimilarity score\ncompared to same-day control")
-#deep.plot
+deep.plot
 
-#ggsave("Plots/beta_inhibitorTreatment.pdf", plot = deep.plot, device = "pdf", width = 3, height = 4, units = "in")
+#ggsave("PLOTS/beta_inhibitorTreatment.pdf", plot = deep.plot, device = "pdf", width = 3, height = 4, units = "in")
 
 
 
