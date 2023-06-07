@@ -376,6 +376,105 @@ nmds.plot
 
 
 ############
+### plot ###
+############
+
+# effects on inhibitor levels
+beta_levels <- beta[beta$Set_x != "set1", 
+                    c("Bray", "Set_y", "Source_y", "Inhib_y", "Level_y", "Day_y")]
+colnames(beta_levels)[-1] <- c("Set", "Source", "Inhibitor", "Level", "Day")
+levels_summary <- beta_summary[beta_summary$Set %in% c("set2", "set3"),]
+
+
+# plot
+levels.plot <-
+  ggplot(beta_levels, aes(x = Inhibitor, y = Bray, color = Level)) +
+  
+  # points
+  geom_jitter(shape = 1, size = 0.5, position = 
+                position_jitterdodge(jitter.width = 0.1, dodge.width = 0.25)) +
+  geom_errorbar(data = levels_summary, show.legend = F,
+                aes(y = Mean, ymin = Mean - SD, ymax = Mean + SD), 
+                width = 0.2, linewidth = 1, position = position_dodge(0.25)) +
+  geom_point(data = levels_summary, aes(y = Mean, shape = Level), size = 3, 
+             position = position_dodge(0.25)) +
+  
+  scale_x_discrete(labels = inhiblabs) +
+  scale_color_manual(values = c("#c02f1d", "#0d3356")) +
+  scale_shape_manual(values = c(17, 19)) +
+  scale_y_continuous(limits = c(0.14,0.78), expand = c(0,0.02)) +
+  
+  # theme
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 8, color = "black"),
+        axis.text.y = element_text(size = 8, color = "black"),
+        axis.title.x = element_text(size = 9, color = "black", face = "bold"),
+        axis.title.y = element_text(size = 9, color = "black", face = "bold"),
+        legend.position = "top",
+        legend.margin = margin(b = -0.3, unit = "cm"),
+        legend.title = element_text(size = 9, color = "black", face = "bold"),
+        strip.text = element_text(size = 8, color = "black", face = "bold"),
+        strip.background = element_rect(colour = NA, fill = NA),
+        panel.border = element_rect(linewidth = 0.75, color = "grey80", fill = NA),
+        axis.ticks = element_line(linewidth = 0.25),
+        axis.line = element_line(linewidth = 0.25)) +
+  guides(color = guide_legend(title.hjust = 0.5, keyheight = 0.75, nrow = 2, title.position = "left")) +
+  labs(x = "Corrosion inhibitor", color = "Inhibitor level", shape = "Inhibitor level",
+       y = "Bray-Curtis dissimilarity score\ncompared to same-day control")
+levels.plot
+#ggsave("Plots/beta_inhibitorLevels.pdf", plot = levels.plot, device = "pdf", width = 3, height = 4, units = "in")
+
+
+# effects on deep water
+beta_treat <- beta[beta$Set_x != "set3", 
+                   c("Bray", "Set_y", "Source_y", "Inhib_y", "Level_y", "Day_y")]
+colnames(beta_treat)[-1] <- c("Set", "Source", "Inhibitor", "Level", "Day")
+treat_summary <- beta_summary[beta_summary$Set %in% c("set1", "set2"),]
+
+
+# plot
+deep.plot <-
+  ggplot(beta_treat, aes(x = Inhibitor, y = Bray, color = Source)) +
+  
+  # points
+  geom_jitter(shape = 1, size = 0.5, position = 
+                position_jitterdodge(jitter.width = 0.1, dodge.width = 0.25)) +
+  geom_errorbar(data = treat_summary, show.legend = F,
+                aes(y = Mean, ymin = Mean - SD, ymax = Mean + SD), 
+                width = 0.2, linewidth = 1, position = position_dodge(0.25)) +
+  geom_point(data = treat_summary, aes(y = Mean, shape = Source), size = 3, 
+             position = position_dodge(0.25)) +
+  
+  scale_x_discrete(labels = inhiblabs) +
+  scale_color_manual(values = c("#d3b53d", "#0d3356")) +
+  scale_shape_manual(values = c(15, 19)) +
+  scale_y_continuous(limits = c(0.14,0.78), expand = c(0,0.02)) +
+  
+  # theme
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 8, color = "black"),
+        axis.text.y = element_text(size = 8, color = "black"),
+        axis.title.x = element_text(size = 9, color = "black", face = "bold"),
+        axis.title.y = element_text(size = 9, color = "black", face = "bold"),
+        legend.position = "top",
+        legend.margin = margin(b = -0.3, unit = "cm"),
+        legend.title = element_text(size = 9, color = "black", face = "bold"),
+        strip.text = element_text(size = 8, color = "black", face = "bold"),
+        strip.background = element_rect(colour = NA, fill = NA),
+        panel.border = element_rect(linewidth = 0.75, color = "grey80", fill = NA),
+        axis.ticks = element_line(linewidth = 0.25),
+        axis.line = element_line(linewidth = 0.25)) +
+  guides(color = guide_legend(title.hjust = 0.5, keyheight = 0.75, nrow = 2, title.position = "right")) +
+  labs(x = "Corrosion inhibitor", color = "Water source", shape = "Water source",
+       y = "Bray-Curtis dissimilarity score\ncompared to same-day control")
+#deep.plot
+
+#ggsave("Plots/beta_inhibitorTreatment.pdf", plot = deep.plot, device = "pdf", width = 3, height = 4, units = "in")
+
+
+
+
+############
 ### save ###
 ############
 
